@@ -1,0 +1,99 @@
+=== Run Docker with the 'kong migrations up' command ===
+
+docker run flask-tutorial kong migrations up
+
+=== Run the Docker Tutorial ===
+
+docker run -d --name kong-database -p 5432:5432 -e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" postgres:9.4
+
+docker run --rm --link kong-database:kong-database -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" -e "KONG_CASSANDRA_CONTACT_POINTS=kong-database" kong:latest kong migrations up
+
+docker run --name kong --link kong-database:kong-database -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 8444:8444 kong
+
+=== Run the Docker Tutorial ===
+
+docker run -d --name kong-database -p 9042:9042 cassandra:3
+
+docker run --rm --link kong-database:kong-database -e "KONG_DATABASE=cassandra" -e "KONG_PG_HOST=kong-database" -e "KONG_CASSANDRA_CONTACT_POINTS=kong-database" kong:latest kong migrations up
+
+docker run -d --name kong --link kong-database:kong-database -e "KONG_DATABASE=cassandra" -e "KONG_CASSANDRA_CONTACT_POINTS=kong-database" -e "KONG_PG_HOST=kong-database" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 8444:8444 kong
+
+^^ This fucking works!?
+
+=== Run the Docker Tutorial ===
+
+docker run -d --name kong-database -p 5432:5432 -e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" postgres:9.4
+
+docker run --rm --link kong-database:kong-database -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" kong:latest kong migrations up
+
+docker run --name kong --link kong-database:kong-database -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 8444:8444 kong
+
+=== Run the Docker Tutorial ===
+
+docker run -d --name kong-database -p 5432:5432 -e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" postgres:9.4
+
+docker run --rm --link kong-database:kong-database -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" kong:latest kong migrations up
+
+docker run -d --name kong --link kong-database:kong-database -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=kong-database" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 8444:8444 kong
+
+curl -i http://localhost:8001/
+
+^^ This Works!
+
+hmmmmmmmm
+
+
+=== Use Kong with a Custom Configuration ===
+
+docker run -d --name kong -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=pf-staging-db.cnsrpxz4jw8u.us-east-1.rds.amazonaws.com " -e "KONG_PG_USER=portal_finance" -e "KONG_PG_PASSWORD=portalfinance" -e "KONG_PG_DATABASE=kong" -e "KONG_PG_PORT=5432" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 7946:7946 -p 7946:7946/udp kong
+
+docker run -d 
+    --name kong 
+    -e "KONG_DATABASE=postgres" 
+    -e "KONG_PG_HOST=pf-staging-db.cnsrpxz4jw8u.us-east-1.rds.amazonaws.com " 
+    -e "KONG_PG_USER=portal_finance" 
+    -e "KONG_PG_PASSWORD=portalfinance" 
+    -e "KONG_PG_DATABASE=kong" 
+    -e "KONG_PG_PORT=5432" 
+    -p 8000:8000 
+    -p 8443:8443 
+    -p 8001:8001 
+    -p 7946:7946 
+    -p 7946:7946/udp 
+kong
+
+=== Okay Let's try this with a Dockerfile ===
+
+docker build -t kong-tutorial:latest .
+
+docker run kong-tutorial
+
+docker run -d 
+    --name kong 
+    -e "KONG_DATABASE=postgres" 
+    -e "KONG_PG_HOST=pf-staging-db.cnsrpxz4jw8u.us-east-1.rds.amazonaws.com " 
+    -e "KONG_PG_USER=portal_finance" 
+    -e "KONG_PG_PASSWORD=portalfinance" 
+    -e "KONG_PG_DATABASE=kong" 
+    -e "KONG_PG_PORT=5432" 
+    -p 8000:8000 
+    -p 8443:8443 
+    -p 8001:8001 
+    -p 7946:7946 
+    -p 7946:7946/udp 
+kong-tutorial
+
+docker run -d --name kong -e "KONG_DATABASE=postgres" -e "KONG_PG_HOST=pf-staging-db.cnsrpxz4jw8u.us-east-1.rds.amazonaws.com " -e "KONG_PG_USER=portal_finance" -e "KONG_PG_PASSWORD=portalfinance" -e "KONG_PG_DATABASE=kong" -e "KONG_PG_PORT=5432" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 7946:7946 -p 7946:7946/udp kong-tutorial
+
+^^ THIS WORKS
+
+docker run -d --name kong-2 -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 7946:7946 -p 7946:7946/udp kong-tutorial
+
+^^ THIS WORKS
+
+docker run -d --name kong-3 kong-tutorial
+
+=== RUNNING THROUGH THE MICROSERVICES TALK SLIDES ===
+
+
+okay so, the nginx config file can be adjusted with an nginx TEMPLATE file

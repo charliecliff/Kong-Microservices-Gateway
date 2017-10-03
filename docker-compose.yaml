@@ -1,0 +1,17 @@
+kong:
+  build: ./__kong
+  restart: always
+  ports:
+    - "8000:8000"
+    - "8001:8001"
+    - "8443:8443"
+    - "7946:7946"
+    - "7946:7946/udp"
+
+# offers:
+#   build: ./__offers
+#   restart: always
+#   ports:
+#     - "5000:5000"
+#   expose:
+#     - "5000"
